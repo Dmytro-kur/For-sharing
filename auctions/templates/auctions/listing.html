@@ -1,0 +1,128 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <h2>{{ listing.title }}</h2>
+    <p>Posted {{ listing.datetime }} Created by {{ listing.user }}</p>
+    <br>
+    {% if listing.is_active %}
+
+      {% for img in listing.listing_photos.all %}
+        <img src="{{ img.image.url }}" alt="image" style="max-width:300px">
+      {% empty %}
+        <img src="#" alt="image" style="max-height:300px">
+      {% endfor %}
+
+      <p>{{ listing.description }}</p>
+      
+      <br>
+      <form method="post">
+        {% csrf_token %}
+        <button class="btn btn-primary" type="submit" name="add" value="yes">Add to watchlist</button>
+        <button class="btn btn-primary" type="submit" name="remove" value="yes">Remove from watchlist</button>
+      </form>
+
+      <br>
+      Category: {{ listing.get_category_display }}
+      <br>
+      
+      {% if its_my %}
+        <form action="{% url 'listing' listing.title %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ img_form.as_p }}
+          <button class="btn btn-primary" type="submit">Add photo</button>
+        </form>
+
+        <form action="{% url 'listing' listing.title %}" method="post">
+          {% csrf_token %}
+          {{ category_form }}
+          <button class="btn btn-primary" type="submit">Select a category</button>
+        </form>
+
+        <form method="post">
+          {% csrf_token %}
+          <button class="btn btn-primary" type="submit" name="close" value="yes">Close listing</button>
+        </form>
+      {% endif %}
+
+      <br>
+      {% if bid_count == 0 %}
+        <strong>Starting price is ${{ listing.current_price }}</strong>
+      {% else %}
+        <strong>{{ bid_count }} bid(s) so far</strong><br>
+        <strong>{{ winner }}'s bid is the current bid ${{ listing.current_price }}</strong>
+      {% endif %}
+      <br>
+      <form action="{% url 'listing' listing.title %}" method="post">
+        {% csrf_token %}
+        {{ bid_form.as_p }}
+        <p style="color:red">
+          {% if bid_error %}
+            {{ bid_error }}
+          {% endif %}
+        </p>
+        <p><button class="btn btn-primary" type="submit">Place bid</button></p>
+      </form>
+      <br>
+
+    {% else %}
+      {% if owner %}
+
+        {% for img in listing.listing_photos.all %}
+          <img src="{{ img.image.url }}" alt="image" style="max-height:300px">
+        {% empty %}
+          <img src="#" alt="image" style="max-height:300px">
+        {% endfor %}
+
+        <p>{{ listing.description }}</p>
+        
+        <br>
+        Category: {{ listing.get_category_display }}
+        <br>
+        <strong>{{ winner }}, you won this auction with the price: ${{ listing.current_price }}</strong>
+        <br>
+
+      {% else %}
+
+        {% for img in listing.listing_photos.all %}
+          <img src="{{ img.image.url }}" alt="image" style="max-height:300px">
+        {% empty %}
+          <img src="#" alt="image" style="max-height:300px">
+        {% endfor %}
+
+        <p>{{ listing.description }}</p>
+        
+        <br>
+        <form method="post">
+          {% csrf_token %}
+          <button class="btn btn-primary" type="submit" name="add" value="yes">Add to watchlist</button>
+          <button class="btn btn-primary" type="submit" name="remove" value="yes">Remove from watchlist</button>
+        </form>
+
+        <br>
+        Category: {{ listing.get_category_display }}
+        
+        <br>
+        <strong>This auction is closed</strong>
+        <br>
+
+      {% endif %}
+    {% endif %}
+
+    <hr>
+
+    <form action="{% url 'listing' listing.title %}" method="post">
+      {% csrf_token %}
+      <p>{{ comment_form }}</p>
+      <button class="btn btn-primary" type="submit">Post</button>
+    </form>
+
+    {% for comment in listing.comments.all %}
+      <br>
+      {{ comment.comment }}
+      <br>
+      <strong>{{ comment.username }} posted {{ comment.datetime }}</strong>
+      <br>    
+    {% endfor %}
+
+{% endblock %}

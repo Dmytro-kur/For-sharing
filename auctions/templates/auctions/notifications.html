@@ -1,0 +1,20 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    
+    <h2>Notifications</h2>
+    <ol>
+        {% for notification in notifications %}
+            <li>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ notification.user }}, 
+                    <a href="{% url 'listing' notification.notification %}"> 
+                        {{ notification.notification }}</a> was closed {{ notification.datetime }}
+                    <button class="btn btn-primary" type="submit" name='notification' 
+                    value="{{ notification.notification }}">Remove</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ol>
+{% endblock %}

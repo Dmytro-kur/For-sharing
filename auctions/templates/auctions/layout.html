@@ -1,0 +1,86 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Auctions</title>
+        <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">-->
+        <link rel="stylesheet" href="{% static 'auctions/styles.css' %}">
+    </head>
+    <body>
+
+        {% block title %}
+        {% endblock %}
+
+        <div>
+            {% if user.is_authenticated %}
+                Signed in as <strong>{{ user.username }}</strong>.
+            {% else %}
+                Not signed in.
+            {% endif %}
+        </div>
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
+            </li>
+            {% if user.is_authenticated %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'my_listings' %}">My listings</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist 
+                        {% if request.user.watch.count != 0 %} 
+                        {{ request.user.watch.count }} 
+                        {% endif %}</a>
+                </li>
+                <li class="nav-item">
+                    <div class="dropdown show">
+                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Category
+                        </a>
+                      
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                          <a class="dropdown-item" href="{% url 'category' 'HM' %}">Home</a>
+                          <a class="dropdown-item" href="{% url 'category' 'EL' %}">Electronics</a>
+                          <a class="dropdown-item" href="{% url 'category' 'FS' %}">Fashion</a>
+                          <a class="dropdown-item" href="{% url 'category' 'HB' %}">Health & Beauty</a>
+                          <a class="dropdown-item" href="{% url 'category' 'GR' %}">Motors</a>
+                          <a class="dropdown-item" href="{% url 'category' 'CL' %}">Collectibles</a>
+                          <a class="dropdown-item" href="{% url 'category' 'SP' %}">Sports</a>
+                          <a class="dropdown-item" href="{% url 'category' 'GA' %}">Garden</a>
+                          <a class="dropdown-item" href="{% url 'category' 'DE' %}">Deals</a>
+                          <a class="dropdown-item" href="{% url 'category' 'UT' %}">Under $10</a>
+                          <a class="dropdown-item" href="{% url 'category' 'PT' %}">Pets</a>
+                          <a class="dropdown-item" href="{% url 'category' 'TY' %}">Toys</a>
+                          <a class="dropdown-item" href="{% url 'category' 'OT' %}">Others</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'new_listing' %}">New listing</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'notifications' %}">Notifications {% if request.user.notifications.count != 0 %} {{ request.user.notifications.count }} {% endif %}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                </li>
+
+            {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'register' %}">Register</a>
+                </li>
+            {% endif %}
+        </ul>
+        <hr>
+
+        {% block body %}
+        {% endblock %}
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </body>
+</html>
