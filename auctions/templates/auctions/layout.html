@@ -9,7 +9,7 @@
     </head>
     <body>
         <h1>Auctions</h1>
-        <div>
+        <div id="is_authenticated">
             {% if user.is_authenticated %}
                 Signed in as <strong>{{ user.username }}</strong>.
             {% else %}
@@ -17,60 +17,59 @@
             {% endif %}
         </div>
         <ul class="nav">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
-            </li>
-            {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'my_listings' %}">My listings</a>
+                    <a class="nav-link" href="{% url 'index' %}">Active Listings</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'watchlist' %}">Watchlist 
-                        {% if request.user.watch.count != 0 %} 
-                        {{ request.user.watch.count }} 
-                        {% endif %}</a>
-                </li>
-                <li class="nav-item">
-                    <div class="dropdown show">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Category
-                        </a>
-                      
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                          <a class="dropdown-item" href="{% url 'category' 'HM' %}">Home</a>
-                          <a class="dropdown-item" href="{% url 'category' 'EL' %}">Electronics</a>
-                          <a class="dropdown-item" href="{% url 'category' 'FS' %}">Fashion</a>
-                          <a class="dropdown-item" href="{% url 'category' 'HB' %}">Health & Beauty</a>
-                          <a class="dropdown-item" href="{% url 'category' 'GR' %}">Motors</a>
-                          <a class="dropdown-item" href="{% url 'category' 'CL' %}">Collectibles</a>
-                          <a class="dropdown-item" href="{% url 'category' 'SP' %}">Sports</a>
-                          <a class="dropdown-item" href="{% url 'category' 'GA' %}">Garden</a>
-                          <a class="dropdown-item" href="{% url 'category' 'DE' %}">Deals</a>
-                          <a class="dropdown-item" href="{% url 'category' 'UT' %}">Under $10</a>
-                          <a class="dropdown-item" href="{% url 'category' 'PT' %}">Pets</a>
-                          <a class="dropdown-item" href="{% url 'category' 'TY' %}">Toys</a>
-                          <a class="dropdown-item" href="{% url 'category' 'OT' %}">Others</a>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'my_listings' %}">My listings</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'watchlist' %}">Watchlist 
+                            {% if request.user.watch.count != 0 %} 
+                            {{ request.user.watch.count }} 
+                            {% endif %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown show">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Category
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'category' 'HM' %}">Home</a>
+                            <a class="dropdown-item" href="{% url 'category' 'EL' %}">Electronics</a>
+                            <a class="dropdown-item" href="{% url 'category' 'FS' %}">Fashion</a>
+                            <a class="dropdown-item" href="{% url 'category' 'HB' %}">Health & Beauty</a>
+                            <a class="dropdown-item" href="{% url 'category' 'GR' %}">Motors</a>
+                            <a class="dropdown-item" href="{% url 'category' 'CL' %}">Collectibles</a>
+                            <a class="dropdown-item" href="{% url 'category' 'SP' %}">Sports</a>
+                            <a class="dropdown-item" href="{% url 'category' 'GA' %}">Garden</a>
+                            <a class="dropdown-item" href="{% url 'category' 'DE' %}">Deals</a>
+                            <a class="dropdown-item" href="{% url 'category' 'UT' %}">Under $10</a>
+                            <a class="dropdown-item" href="{% url 'category' 'PT' %}">Pets</a>
+                            <a class="dropdown-item" href="{% url 'category' 'TY' %}">Toys</a>
+                            <a class="dropdown-item" href="{% url 'category' 'OT' %}">Others</a>
+                            </div>
                         </div>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'new_listing' %}">New listing</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'notifications' %}">Notifications {% if request.user.notifications.count != 0 %} {{ request.user.notifications.count }} {% endif %}</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
-                </li>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'new_listing' %}">New listing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'notifications' %}">Notifications {% if request.user.notifications.count != 0 %} {{ request.user.notifications.count }} {% endif %}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                    </li>
 
-            {% else %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Log In</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Register</a>
-                </li>
-            {% endif %}
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
         </ul>
         <hr>
 
