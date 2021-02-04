@@ -1,20 +1,17 @@
-$color: black;
+$color: rgb(255, 236, 236);
 
-ul {
-    font-size: 14px;
-    color: $color;
+.auctions {
 
-    a {
-        font-size: 18px;
+    .title {
+
+        div {
+            background-color: $color;
+        }
     }
 }
 
-%ol {
-    font-size: 18px;
-    color: $color;
-}
 
-.grid-item {
+/*.grid-item {
     @extend %ol;
     background-color: white;
-}
+}*/

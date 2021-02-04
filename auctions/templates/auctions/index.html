@@ -9,9 +9,9 @@
           <div class="grid-item">
             <p><a href="{% url 'listing' listing.title %}">{{ listing.title }}</a></p>
           </div>
-          <div class="grid-item">
-          {{ listing.description }}
-          </div>
+
+
+
           <div class="grid-item">
             {% for img in listing.listing_photos.all %}
               <p><img src="{{ img.image.url }}" alt="image"></p>
@@ -19,8 +19,20 @@
               <p><img src="#" alt="image"></p>
             {% endfor %}
           </div>
-          <div class="grid-item">
-            <p>${{ listing.current_price }}</p>
+
+          <p>
+            <a class="btn btn-light" data-bs-toggle="collapse" href="#multiCollapseExample{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="multiCollapseExample{{ forloop.counter }}">Description</a>
+          </p>
+          <div class="row">
+            <div class="col">
+              <div class="collapse multi-collapse" id="multiCollapseExample{{ forloop.counter }}">
+                <div class="card card-body">
+                  ${{ listing.current_price }}
+                  <hr>
+                  {{ listing.description }}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       {% endfor %}

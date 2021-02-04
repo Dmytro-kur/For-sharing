@@ -179,6 +179,7 @@ def listing(request, title):
                         #"message": "Image isn\'t valid"
                     #})
             if request.POST.get('comment'):
+                bidform = BidForm()
                 commentform = CommForm(request.POST)
                 if commentform.is_valid():
                     comment = commentform.cleaned_data["comment"]
@@ -209,6 +210,7 @@ def listing(request, title):
                             #"message": 'bid isn\'t valid',
                         #})
             if request.POST.get("category"):
+                bidform = BidForm()
                 catform = CategoryForm(request.POST)
                 if catform.is_valid():
                     category = catform.cleaned_data["category"]
@@ -219,12 +221,14 @@ def listing(request, title):
                         #"message": 'category isn\'t valid',
                 #})       
             if request.POST.get('add') or request.POST.get('remove'):
+                bidform = BidForm()
                 if request.POST.get("add") == 'yes':
                     listing.watchlist.add(user_obj)
                 if request.POST.get('remove') == 'yes':
                     listing.watchlist.remove(user_obj)
-                    
+
             if request.POST.get('close'):
+                bidform = BidForm()
                 listing.is_active=False
                 listing.save()
                 b = Bid.objects.all().filter(listing=listing)

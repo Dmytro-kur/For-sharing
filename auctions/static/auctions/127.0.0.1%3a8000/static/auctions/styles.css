@@ -5,15 +5,16 @@
 
 #is_authenticated {
     font-size: small;
+    background-color: #dddddd;
+    border-radius: 0px;
     padding: 5px;
-    text-align: left;
+    text-align: right;
     padding-right: 15px;
 }
 
-#auction_logo {
+#logo {
     color:firebrick;
-    border-radius: 70px;
-    padding: 10px;
+    border-radius: 50px;
 }
 
 img {
@@ -44,7 +45,7 @@ img {
 }
 
 .grid:hover {
-    border-radius: 0.2px;
+    border-radius: 20px;
     border-width: 1.5px;
     border-style: outset;
     border-color: rgb(230, 230, 230);
@@ -58,13 +59,13 @@ img {
 .title {
     display: inline-flex;
     align-items: center;
-    width: 100%;
+    width: auto;
 
 }
 .title .gif {
     background-image: url("dribbble.gif");
     background-size: cover;
-    width: 150px;
+    width: 100px;
     height: 100px;
 
 }
