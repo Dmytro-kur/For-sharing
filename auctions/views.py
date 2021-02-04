@@ -223,6 +223,7 @@ def listing(request, title):
                     listing.watchlist.add(user_obj)
                 if request.POST.get('remove') == 'yes':
                     listing.watchlist.remove(user_obj)
+                    
             if request.POST.get('close'):
                 listing.is_active=False
                 listing.save()

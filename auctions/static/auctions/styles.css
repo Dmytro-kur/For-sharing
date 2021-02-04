@@ -45,7 +45,8 @@ img {
 }
 
 .grid:hover {
-    border-width: 3px;
+    border-radius: 20px;
+    border-width: 1.5px;
     border-style: outset;
     border-color: rgb(230, 230, 230);
     cursor: default;

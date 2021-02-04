@@ -1,0 +1,20 @@
+$color: black;
+
+ul {
+    font-size: 14px;
+    color: $color;
+
+    a {
+        font-size: 18px;
+    }
+}
+
+%ol {
+    font-size: 18px;
+    color: $color;
+}
+
+.grid-item {
+    @extend %ol;
+    background-color: white;
+}

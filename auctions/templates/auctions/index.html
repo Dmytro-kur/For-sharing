@@ -7,16 +7,16 @@
       {% for listing in listings %}
         <div class="grid">
           <div class="grid-item">
-            <a href="{% url 'listing' listing.title %}">{{ listing.title }}</a>
+            <p><a href="{% url 'listing' listing.title %}">{{ listing.title }}</a></p>
           </div>
           <div class="grid-item">
           {{ listing.description }}
           </div>
           <div class="grid-item">
             {% for img in listing.listing_photos.all %}
-              <img src="{{ img.image.url }}" alt="image">
+              <p><img src="{{ img.image.url }}" alt="image"></p>
             {% empty %}
-              <img src="#" alt="image">
+              <p><img src="#" alt="image"></p>
             {% endfor %}
           </div>
           <div class="grid-item">
