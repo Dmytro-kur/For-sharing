@@ -5,6 +5,7 @@
     <form action="{% url 'new_listing' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ inf_form.as_p }}
+        {{ inf_form.media }}
         {{ img_form.as_p }}
         <button class="btn btn-primary" type="submit">Create</button>
 

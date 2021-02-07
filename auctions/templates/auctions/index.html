@@ -7,7 +7,7 @@
       {% for listing in listings %}
         <div class="grid">
           <div class="grid-item">
-            <p>Link: <a href="{% url 'listing' listing.title %}">{{ listing.title }}
+            <p>{{ listing.title }}<a href="{% url 'listing' listing.title %}">
             {% for img in listing.listing_photos.all %}
               <p><img src="{{ img.image.url }}" alt="image"></p>
             {% empty %}
@@ -26,7 +26,7 @@
                   <div class="card card-body">
                     ${{ listing.current_price }}
                     <hr>
-                    {{ listing.description }}
+                    {{ listing.description | safe}}
                   </div>
                 </div>
               </div>

@@ -13,7 +13,7 @@
         <img src="#" alt="image" style="max-height:300px">
       {% endfor %}
 
-      <p>{{ listing.description }}</p>
+      <p>{{ listing.description | safe }}</p>
       
       <br>
       <form method="post">
@@ -113,16 +113,17 @@
 
     <form action="{% url 'listing' listing.title %}" method="post">
       {% csrf_token %}
-      <p>{{ comment_form }}</p>
+      <p>{{ comment_form }}{{ comment_form.media }}</p>
       <button class="btn btn-primary" type="submit">Post</button>
     </form>
 
     {% for comment in listing.comments.all %}
       <br>
-      {{ comment.comment }}
+      {{ comment.comment | safe}}
       <br>
       <strong>{{ comment.username }} posted {{ comment.datetime }}</strong>
-      <br>    
+      <br>
+      <hr>   
     {% endfor %}
 
 {% endblock %}

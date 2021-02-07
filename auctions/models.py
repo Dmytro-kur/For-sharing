@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 import re
+from ckeditor.fields import RichTextField
 
 class User(AbstractUser):
     pass
@@ -27,7 +28,7 @@ class Listing(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
     title = models.CharField(max_length=255, unique=True)
-    description = models.TextField(max_length=255)
+    description = RichTextField(blank=True)
     starting_bid = models.DecimalField(max_digits=19, decimal_places=2)
     category = models.CharField(max_length=2, choices=Category.choices,
                                 default=Category.__empty__, blank=True)
@@ -52,7 +53,7 @@ class Comment(models.Model):
     datetime = models.DateTimeField(auto_now_add=True, blank=True)
     username = models.CharField(max_length=255)
     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name = "comments")
-    comment = models.TextField(max_length=255, blank=True)
+    comment = RichTextField(blank=True)
 
     def __str__(self):
         return f"{self.username} said about {self.listing.title}: \"{self.comment}\", Created {self.datetime}"
