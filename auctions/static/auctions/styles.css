@@ -69,3 +69,11 @@ img {
     height: 100px;
 
 }
+
+#myCarousel > img{
+    display: inline-block;
+    object-fit: contain;
+    max-width: 500px;
+    max-height: 500px;
+
+}
