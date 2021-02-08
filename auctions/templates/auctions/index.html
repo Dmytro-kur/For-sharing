@@ -8,11 +8,9 @@
         <div class="grid">
           <div class="grid-item">
             <p>{{ listing.title }}<a href="{% url 'listing' listing.title %}">
-            {% for img in listing.listing_photos.all %}
-              <p><img src="{{ img.image.url }}" alt="image"></p>
-            {% empty %}
-              <p><img src="#" alt="image"></p>
-            {% endfor %}
+
+              <p><img src="{{ listing.listing_photos.all.first.image.url }}" alt="image"></p>
+
             </a></p>
           </div>
 
