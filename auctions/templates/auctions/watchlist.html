@@ -3,18 +3,36 @@
 {% block body %}
     
     <h2>Watchlist</h2>
-
-    <ul>
-      {% for listing in listings %}
-        <li>
-          <a href="{% url 'listing' listing.title %}">{{ listing.title }}</a>
-          {% if listing.is_active %}
-            active
-          {% else %}
-            closed
-          {% endif %}
-        </li>
-      {% endfor %}
-    </ul>
       
+    <div id="container">
+      {% for listing in listings %}
+        <div class="grid">
+          <div class="grid-item">
+            <p>{{ listing.title }}{% if listing.is_active %} (active){% else %} (closed){% endif %}<a href="{% url 'listing' listing.title %}">
+
+              <p><img class="index" src="{{ listing.listing_photos.all.first.image.url }}" alt="image"></p>
+
+            </a></p>
+          </div>
+
+          <div class="grid-item">
+            <p>
+              <a class="btn btn-light" data-bs-toggle="collapse" href="#multiCollapseExample{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="multiCollapseExample{{ forloop.counter }}">Details</a>
+            </p>
+            <div class="row">
+              <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapseExample{{ forloop.counter }}">
+                  <div class="card card-body">
+                    ${{ listing.current_price }}
+                    <hr>
+                    {{ listing.description | safe}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
 {% endblock %}

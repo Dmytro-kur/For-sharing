@@ -28,7 +28,7 @@ class Listing(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
     title = models.CharField(max_length=255, unique=True)
-    description = RichTextField(blank=True)
+    description = RichTextField()
     starting_bid = models.DecimalField(max_digits=19, decimal_places=2)
     category = models.CharField(max_length=2, choices=Category.choices,
                                 default=Category.__empty__, blank=True)

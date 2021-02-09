@@ -147,7 +147,7 @@ def new_listing(request):
                 })
         else:
             return render(request, "auctions/new_listing.html", {
-                "inf_form": InfoForm(),
+                "inf_form": InfoForm({"description": 'Add description'}),
                 "img_form": ImageForm(),
                 })
     else:
