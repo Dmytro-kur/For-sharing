@@ -173,6 +173,7 @@ def listing(request, title):
                 imgform = ImageForm(request.POST, request.FILES)
                 if imgform.is_valid():
                     image = imgform.cleaned_data["image"]
+                    
                     Photo(listing=listing, image=image).save()
                 #else:
                     #return render(request, 'auctions/error.html', {

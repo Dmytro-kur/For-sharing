@@ -9,7 +9,7 @@
           <div class="grid-item">
             <p>{{ listing.title }}<a href="{% url 'listing' listing.title %}">
 
-              <p><img src="{{ listing.listing_photos.all.first.image.url }}" alt="image"></p>
+              <p><img class="index" src="{{ listing.listing_photos.all.first.image.url }}" alt="image"></p>
 
             </a></p>
           </div>

@@ -16,7 +16,7 @@
     padding: 10px;
 }
 
-img {
+.index {
     max-height: 150px;
     max-width: 250px;
     
@@ -70,10 +70,20 @@ img {
 
 }
 
-#myCarousel > img{
-    display: inline-block;
-    object-fit: contain;
+#myCarousel {
     max-width: 500px;
-    max-height: 500px;
+    margin: auto;
 
+
+}
+
+.carousel-inner{
+
+    border: 1px solid rgb(214, 214, 214);
+
+}
+
+.carousel-inner img{
+    height: 600px;
+    object-fit: cover;
 }
