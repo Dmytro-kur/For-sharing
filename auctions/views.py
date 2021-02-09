@@ -22,30 +22,65 @@ class max_count():
         return self.obj.bids.aggregate(Count("bid"))['bid__count']-1
 
 class InfoForm(forms.ModelForm):
+    
     class Meta:
         model = Listing
         fields = ['title', 'description', 'starting_bid', 'category']
+        labels = {
+            'title': '',
+            'starting_bid': '',
+            'category': '',
+        }
+
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'starting_bid': forms.NumberInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Listing
         fields = ['category']
+        labels = {
+            'category': '',
+        }
+
+        widgets = {
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
 
 class CommForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['comment']
+        labels = {
+            'comment': '',
+        }
 
 class BidForm(forms.ModelForm):
     class Meta:
         model = Bid
         fields = ['bid']
+        labels = {
+            'bid': '',
+        }
+
+        widgets = {
+            'bid': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
 
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Photo
         fields = ['image']
+        labels = {
+            'image': '',
+        }
 
+        widgets = {
+            'image': forms.FileInput(attrs={'class': 'form-control'}),
+        }
 
 
 def index(request):
