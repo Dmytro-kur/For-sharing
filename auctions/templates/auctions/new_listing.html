@@ -4,11 +4,6 @@
 
     <form action="{% url 'new_listing' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {% if description_error %}
-            <div class="alert alert-danger" role="alert">
-                {{ description_error }}
-            </div>
-        {% endif %}
         {{ inf_form.as_p }}
         {{ inf_form.media }}
         <br>
