@@ -27,9 +27,9 @@ class InfoForm(forms.ModelForm):
         model = Listing
         fields = ['title', 'description', 'starting_bid', 'category']
         labels = {
-            'title': '',
-            'starting_bid': '',
-            'category': '',
+            'title': 'Title',
+            'starting_bid': 'Enter the starting price',
+            'category': 'Choose category (optional)',
         }
 
         widgets = {
@@ -205,7 +205,7 @@ def listing(request, title):
         its_my = listing.user == request.user
 
         if request.method == 'POST':
-            bidform = None
+            bidform = BidForm()
             if request.FILES.get('image'):
                 imgform = ImageForm(request.POST, request.FILES)
                 if imgform.is_valid():
@@ -217,7 +217,6 @@ def listing(request, title):
                         #"message": "Image isn\'t valid"
                     #})
             if request.POST.get('comment'):
-                bidform = BidForm()
                 commentform = CommForm(request.POST)
                 if commentform.is_valid():
                     comment = commentform.cleaned_data["comment"]
@@ -248,7 +247,6 @@ def listing(request, title):
                             #"message": 'bid isn\'t valid',
                         #})
             if request.POST.get("category"):
-                bidform = BidForm()
                 catform = CategoryForm(request.POST)
                 if catform.is_valid():
                     category = catform.cleaned_data["category"]
@@ -259,14 +257,12 @@ def listing(request, title):
                         #"message": 'category isn\'t valid',
                 #})       
             if request.POST.get('add') or request.POST.get('remove'):
-                bidform = BidForm()
                 if request.POST.get("add") == 'yes':
                     listing.watchlist.add(user_obj)
                 if request.POST.get('remove') == 'yes':
                     listing.watchlist.remove(user_obj)
 
             if request.POST.get('close'):
-                bidform = BidForm()
                 listing.is_active=False
                 listing.save()
                 b = Bid.objects.all().filter(listing=listing)

@@ -7,11 +7,12 @@
       {% for listing in listings %}
         <div class="grid">
           <div class="grid-item">
-            <p>{{ listing.title }}<a href="{% url 'listing' listing.title %}">
 
-              <p><img class="index" src="{{ listing.listing_photos.all.first.image.url }}" alt="image"></p>
+            <p>{{ listing.title }}
+              <a href="{% url 'listing' listing.title %}">
+              <p><img class="index" src="{{ listing.listing_photos.all.first.image.url }}" alt="image"></p></a>
+            </p>
 
-            </a></p>
           </div>
 
           <div class="grid-item">
@@ -22,9 +23,11 @@
               <div class="col">
                 <div class="collapse multi-collapse" id="multiCollapseExample{{ forloop.counter }}">
                   <div class="card card-body">
-                    ${{ listing.current_price }}
-                    <hr>
-                    {{ listing.description | safe}}
+                    <ul class="list-group">
+                      <li class="list-group-item list-group-item-secondary">${{ listing.current_price }}</li>
+                      <li class="list-group-item list-group-item-info">Description: {{ listing.description|safe }}</li>
+                      <li class="list-group-item list-group-item-info">Category: {{ listing.get_category_display }}</li>
+                    </ul>
                   </div>
                 </div>
               </div>

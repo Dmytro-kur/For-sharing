@@ -6,6 +6,8 @@
         {% csrf_token %}
         {{ inf_form.as_p }}
         {{ inf_form.media }}
+        <br>
+        <p>Add a photo of the item (optional):</p>
         <!-- Add photo -->
         <div class="input-group">
             <div class="custom-file">
@@ -17,7 +19,8 @@
             </div>
         </div>
         <!-- end -->
-        <button class="btn btn-primary" type="submit">Create</button>
+        <br>
+        <button class="btn btn-secondary" type="submit">Create</button>
 
     </form>
 

@@ -37,23 +37,33 @@
 #container > div {
     margin: 10px;
     padding: 20px;
-    width: 300px;
+    width: 365px;
 }
 
 .grid {
     display: grid;
+    overflow: auto;
 }
 
-.grid:hover {
-    border-radius: 0.2px;
+.grid:hover, .comment_grid_item {
+    border-radius: 5.5px;
     border-width: 1.5px;
     border-style: outset;
     border-color: rgb(230, 230, 230);
     cursor: default;
 }
 
+.comment_grid_item {
+    margin: 20px;
+    padding: 5px;
+}
+
 .grid-item p {
     text-align: center;
+}
+
+.card-body p {
+    text-align: justify;
 }
 
 .title {
@@ -70,7 +80,7 @@
 
 }
 
-#myCarousel {
+#myCarousel, .comment_grid {
     max-width: 700px;
     margin: auto;
 
@@ -94,4 +104,9 @@
 
 .place_bid button {
     white-space: nowrap;
+}
+
+.watchlist_button {
+    max-width: 215px;
+    margin: auto;
 }

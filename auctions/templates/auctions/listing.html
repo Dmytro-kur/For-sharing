@@ -49,32 +49,37 @@
     <br>
 
     <!-- Add/remove listing to/from watchlist -->
-    <form method="post">
+    <form class="watchlist_button" method="post">
       {% csrf_token %}
-      <button class="btn btn-primary" type="submit" name="add" value="yes">Add to watchlist</button>
-      <button class="btn btn-primary" type="submit" name="remove" value="yes">Remove from watchlist</button>
+      <button class="btn btn-outline-dark" type="submit" name="add" value="yes">Add</button>
+      Watchlist
+      <button class="btn btn-outline-dark" type="submit" name="remove" value="yes">Remove</button>
     </form>
     <!-- end -->
 
     {% if listing.is_active %}
 
-    <br>
-      <!-- Details -->
-      <p>{{ listing.description | safe }}</p>
-      Category: {{ listing.get_category_display }}
       <br>
-      {% if bid_count == 0 %}
-        <strong>Starting price is ${{ listing.current_price }}</strong>
-      {% else %}
-        <strong>{{ bid_count }} bid(s) so far</strong><br>
-        <strong>{{ winner }}'s bid is the current bid ${{ listing.current_price }}</strong>
-      {% endif %}
-      <br>
+
       <!-- Details -->
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-secondary">Details:</li>
+        <li class="list-group-item list-group-item-info">Description: {{ listing.description|safe }}</li>
+        <li class="list-group-item list-group-item-info">Category: {{ listing.get_category_display }}</li>
+        <li class="list-group-item list-group-item-info">
+          {% if bid_count == 0 %}
+            <strong>Starting price is ${{ listing.current_price }}</strong>
+          {% else %}
+            <strong>{{ bid_count }} bid(s) so far</strong><br>
+            <strong>{{ winner }}'s bid is the current bid ${{ listing.current_price }}</strong>
+          {% endif %}
+        </li>
+      </ul>
+      <!-- Details -->
+
       <br>
       
       {% if its_my %}
-
 
         <!-- Add photo -->
         <form action="{% url 'listing' listing.title %}" method="post" enctype="multipart/form-data">
@@ -109,37 +114,42 @@
       {% endif %}
 
         <!-- Place bid -->
-        <form class="place_bid" action="{% url 'listing' listing.title %}" method="post">
+        <form action="{% url 'listing' listing.title %}" method="post">
           {% csrf_token %}
-          <p style="color:red">{% if bid_error %} {{ bid_error }} {% endif %}</p>
-          <button class="btn btn-secondary" type="submit">Place bid</button>
-          {{ bid_form }}
+          <div class="place_bid">
+            <button class="btn btn-secondary" type="submit">Place bid</button>
+            {{ bid_form }}
+          </div>
+          {% if bid_error %} 
+            <div class="alert alert-danger" role="alert">
+              {{ bid_error }}
+            </div>
+          {% endif %}
         </form>
         <!-- end -->
         <br>
 
     {% else %} <!-- if listing is closed -->
-
+        <br>
+      <!-- Details -->
+      <ul class="list-group">
+        <li class="list-group-item list-group-item-secondary">Details:</li>
+        <li class="list-group-item list-group-item-info">Description: {{ listing.description|safe }}</li>
+        <li class="list-group-item list-group-item-info">Category: {{ listing.get_category_display }}</li>
+      </ul>
+      <!-- Details -->
+      <br>
       {% if owner %}
 
-        <p>{{ listing.description | safe}}</p>
-        
-        <br>
-        Category: {{ listing.get_category_display }}
-        <br>
-        <strong>{{ winner }}, you won this auction with the price: ${{ listing.current_price }}</strong>
-        <br>
+        <div class="alert alert-success" role="alert">
+          <strong>{{ winner }}, you won this auction with the price: ${{ listing.current_price }}</strong>
+        </div>
 
       {% else %}
-
-        <p>{{ listing.description | safe}}</p>
         
-        <br>
-        Category: {{ listing.get_category_display }}
-        
-        <br>
-        <strong>This auction is closed</strong>
-        <br>
+        <div class="alert alert-danger" role="alert">
+          <strong>This auction is closed</strong>
+        </div>
 
       {% endif %}
     {% endif %}
@@ -148,18 +158,24 @@
     <!-- Comments -->
     <form action="{% url 'listing' listing.title %}" method="post">
       {% csrf_token %}
-      <p>{{ comment_form }}{{ comment_form.media }}</p>
-      <button class="btn btn-primary" type="submit">Post</button>
+      {{ comment_form }}
+      {{ comment_form.media }}
+      <br>
+      <button class="btn btn-secondary" type="submit">Post</button>
     </form>
 
-    {% for comment in listing.comments.all %}
-      <br>
-      {{ comment.comment | safe}}
-      <br>
-      <strong>{{ comment.username }} posted {{ comment.datetime }}</strong>
-      <br>
-      <hr>   
-    {% endfor %}
+    
+    <div class="comment_grid">
+      {% for comment in listing.comments.all %}
+        <div class="comment_grid_item">
+          <p style="font-size: 12px; text-align: left; font-style: italic;">{{ comment.username }} said:</p>
+          <div style="text-indent: 50px;">
+            {{ comment.comment|safe}}
+          </div>
+          <p style="font-size: 12px; text-align: right;">{{ comment.datetime }}</p>
+        </div>
+      {% endfor %}
+    </div>
     <!-- end -->
 
 {% endblock %}

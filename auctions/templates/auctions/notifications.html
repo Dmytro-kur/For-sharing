@@ -12,8 +12,8 @@
                         {{ notification.user }}, 
                         <a href="{% url 'listing' notification.notification %}"> 
                             {{ notification.notification }}</a> was closed {{ notification.datetime }}
-                        <button class="btn btn-primary" type="submit" name='notification' 
-                        value="{{ notification.notification }}">Remove</button>
+                        <button class="btn btn-outline-dark" type="submit" name='notification' 
+                        value="{{ notification.notification }}"> clear </button>
                     </form>
                 </li>
             </div>
