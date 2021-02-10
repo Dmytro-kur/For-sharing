@@ -87,3 +87,11 @@
     height: 600px;
     object-fit: contain;
 }
+
+.select_category, .place_bid {
+    display: flex;
+}
+
+.place_bid button {
+    white-space: nowrap;
+}

@@ -6,7 +6,17 @@
         {% csrf_token %}
         {{ inf_form.as_p }}
         {{ inf_form.media }}
-        {{ img_form.as_p }}
+        <!-- Add photo -->
+        <div class="input-group">
+            <div class="custom-file">
+            {{ img_form }}
+            <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+            </div>
+            <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Add Photo</button>
+            </div>
+        </div>
+        <!-- end -->
         <button class="btn btn-primary" type="submit">Create</button>
 
     </form>

@@ -79,7 +79,9 @@ class ImageForm(forms.ModelForm):
         }
 
         widgets = {
-            'image': forms.FileInput(attrs={'class': 'form-control'}),
+            'image': forms.FileInput(attrs={'class': 'custom-file-input',
+                                            'id': 'inputGroupFile04',
+                                            'aria-describedby': 'inputGroupFileAddon04',}),
         }
 
 

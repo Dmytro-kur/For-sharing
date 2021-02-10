@@ -23,7 +23,7 @@ class Listing(models.Model):
         PETS = 'PT', _('Pets')
         TOYS = 'TY', _('Toys')
         OTHERS = 'OT', _('Others')
-        #__empty__ = _('(Unknown)')
+        __empty__ = _('(Unknown)')
 
     datetime = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
@@ -31,7 +31,7 @@ class Listing(models.Model):
     description = RichTextField()
     starting_bid = models.DecimalField(max_digits=19, decimal_places=2)
     category = models.CharField(max_length=2, choices=Category.choices,
-                                #default=Category.OTHERS
+                                default=Category.OTHERS,
                                 blank=True)
     watchlist = models.ManyToManyField(to=User, related_name="watch", blank=True)
     current_price = models.DecimalField(max_digits=19, decimal_places=2)

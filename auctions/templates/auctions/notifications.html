@@ -5,16 +5,18 @@
     <h2>Notifications</h2>
     <ol>
         {% for notification in notifications %}
-            <li>
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ notification.user }}, 
-                    <a href="{% url 'listing' notification.notification %}"> 
-                        {{ notification.notification }}</a> was closed {{ notification.datetime }}
-                    <button class="btn btn-primary" type="submit" name='notification' 
-                    value="{{ notification.notification }}">Remove</button>
-                </form>
-            </li>
+            <div class="alert alert-info" role="alert">
+                <li>
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ notification.user }}, 
+                        <a href="{% url 'listing' notification.notification %}"> 
+                            {{ notification.notification }}</a> was closed {{ notification.datetime }}
+                        <button class="btn btn-primary" type="submit" name='notification' 
+                        value="{{ notification.notification }}">Remove</button>
+                    </form>
+                </li>
+            </div>
         {% endfor %}
     </ol>
 {% endblock %}
