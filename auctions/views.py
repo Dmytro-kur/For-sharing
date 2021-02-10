@@ -34,7 +34,8 @@ class InfoForm(forms.ModelForm):
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'starting_bid': forms.NumberInput(attrs={'class': 'form-control'}),
+            'starting_bid': forms.NumberInput(attrs={'class': 'form-control',
+                                                    'placeholder': 'e.g. 100.00'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
         }
 
@@ -67,7 +68,8 @@ class BidForm(forms.ModelForm):
         }
 
         widgets = {
-            'bid': forms.NumberInput(attrs={'class': 'form-control'}),
+            'bid': forms.NumberInput(attrs={'class': 'form-control',
+                                            'placeholder': '$'}),
         }
 
 class ImageForm(forms.ModelForm):
@@ -184,8 +186,9 @@ def new_listing(request):
                 })
         else:
             return render(request, "auctions/new_listing.html", {
-                "inf_form": InfoForm({"description": 'Add description'}),
+                "inf_form": InfoForm(),
                 "img_form": ImageForm(),
+                "description_error": 'Description field is required, please fill description field',
                 })
     else:
         return render(request, "auctions/new_listing.html", {

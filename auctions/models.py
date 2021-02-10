@@ -38,7 +38,7 @@ class Listing(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.title}, {self.description} WITH starting bid {self.starting_bid}, Posted {self.datetime}"
+        return f"/{self.title}/ starting bid: ${self.starting_bid} / posted: {self.datetime}"
 
 class Photo(models.Model):
     listing = models.ForeignKey(Listing, default=None,

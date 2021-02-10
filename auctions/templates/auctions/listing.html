@@ -1,13 +1,13 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <!-- Title -->
+    <!-- TITLE -->
     <p><h2 style="display: inline;">{{ listing.title }}</h2><span style="font-size: 12px"> posted by {{ listing.user }} - {{ listing.datetime }}</span></p>
     <!-- end -->
 
     <br>
 
-    <!-- Rendering carousel photos for listing -->
+    <!-- Rendering carousel PHOTOS for listing -->
     <div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
       <ol class="carousel-indicators">
         <li data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"></li>
@@ -48,7 +48,7 @@
 
     <br>
 
-    <!-- Add/remove listing to/from watchlist -->
+    <!-- Add/remove listing to/from WATCHLIST -->
     <form class="watchlist_button" method="post">
       {% csrf_token %}
       <button class="btn btn-outline-dark" type="submit" name="add" value="yes">Add</button>
@@ -61,7 +61,7 @@
 
       <br>
 
-      <!-- Details -->
+      <!-- DETAILS -->
       <ul class="list-group">
         <li class="list-group-item list-group-item-secondary">Details:</li>
         <li class="list-group-item list-group-item-info">Description: {{ listing.description|safe }}</li>
@@ -75,13 +75,13 @@
           {% endif %}
         </li>
       </ul>
-      <!-- Details -->
+      <!-- end -->
 
       <br>
       
       {% if its_my %}
 
-        <!-- Add photo -->
+        <!-- ADD PHOTO -->
         <form action="{% url 'listing' listing.title %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}
           <div class="input-group">
@@ -96,14 +96,14 @@
         </form>
         <!-- end -->
         <br>
-        <!-- Select category -->
+        <!-- Select CATEGORY -->
         <form class="select_category" action="{% url 'listing' listing.title %}" method="post">
           {% csrf_token %}
           <button class="btn btn-secondary" type="submit">Select</button>{{ category_form }}
         </form>
         <!-- end -->
         <br>
-        <!-- Close listing -->
+        <!-- CLOSE listing -->
         <form method="post">
           {% csrf_token %}
           <button class="btn btn-secondary" type="submit" name="close" value="yes">Close listing</button>
@@ -113,7 +113,7 @@
 
       {% endif %}
 
-        <!-- Place bid -->
+        <!-- Place BID -->
         <form action="{% url 'listing' listing.title %}" method="post">
           {% csrf_token %}
           <div class="place_bid">
@@ -127,6 +127,7 @@
           {% endif %}
         </form>
         <!-- end -->
+
         <br>
 
     {% else %} <!-- if listing is closed -->
@@ -154,14 +155,16 @@
       {% endif %}
     {% endif %}
 
-    <hr>
+    <div class="alert alert-warning" role="alert"></div>
+
     <!-- Comments -->
+    <br>
     <form action="{% url 'listing' listing.title %}" method="post">
       {% csrf_token %}
       {{ comment_form }}
       {{ comment_form.media }}
       <br>
-      <button class="btn btn-secondary" type="submit">Post</button>
+      <button class="btn btn-secondary" type="submit">Add comment</button>
     </form>
 
     
