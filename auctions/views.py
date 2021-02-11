@@ -34,8 +34,7 @@ class InfoForm(forms.ModelForm):
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'starting_bid': forms.NumberInput(attrs={'class': 'form-control',
-                                                    'placeholder': 'e.g. 100.00'}),
+            'starting_bid': forms.NumberInput(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
         }
 
@@ -68,8 +67,7 @@ class BidForm(forms.ModelForm):
         }
 
         widgets = {
-            'bid': forms.NumberInput(attrs={'class': 'form-control',
-                                            'placeholder': '$'}),
+            'bid': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 class ImageForm(forms.ModelForm):
@@ -187,9 +185,8 @@ def new_listing(request):
                 })
         else:
             return render(request, "auctions/new_listing.html", {
-                "inf_form": InfoForm(),
+                "inf_form": InfoForm({"description": 'Add description'}),
                 "img_form": ImageForm(),
-                "description_error": 'Description field is required, please fill description field',
                 })
     else:
         return render(request, "auctions/new_listing.html", {
@@ -202,7 +199,7 @@ def new_listing(request):
 def listing(request, title):
 
     listing = Listing.objects.filter(title=title).first()
-    user_obj = User.objects.filter(username=request.user).first()
+    user = User.objects.filter(username=request.user).first()
     bid_error = None
     if listing:
         listing_obj = max_count(listing)
@@ -211,7 +208,7 @@ def listing(request, title):
         if request.method == 'POST':
             bidform = BidForm()
             if request.FILES.get('image'):
-                imgform = ImageForm(request.POST, request.FILES)
+                imgform = ImageForm(request.FILES)
                 if imgform.is_valid():
                     image = imgform.cleaned_data["image"]
                     
@@ -262,9 +259,9 @@ def listing(request, title):
                 #})       
             if request.POST.get('add') or request.POST.get('remove'):
                 if request.POST.get("add") == 'yes':
-                    listing.watchlist.add(user_obj)
+                    listing.watchlist.add(user)
                 if request.POST.get('remove') == 'yes':
-                    listing.watchlist.remove(user_obj)
+                    listing.watchlist.remove(user)
 
             if request.POST.get('close'):
                 listing.is_active=False
