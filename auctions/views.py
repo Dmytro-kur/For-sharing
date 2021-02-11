@@ -183,6 +183,7 @@ def new_listing(request):
                 "its_my": True,
                 "owner": True,
                 "bid_error": None,
+                "bid_error": None,
                 })
         else:
             return render(request, "auctions/new_listing.html", {
