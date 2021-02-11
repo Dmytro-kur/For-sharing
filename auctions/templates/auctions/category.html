@@ -24,7 +24,7 @@
                 <div class="collapse multi-collapse" id="multiCollapseExample{{ forloop.counter }}">
                   <div class="card card-body">
                     <ul class="list-group">
-                      <li class="list-group-item list-group-item-secondary">${{ listing.current_price }}</li>
+                      <li class="list-group-item list-group-item-secondary">{% if listing.current_bid %}${{ listing.current_bid }}{% else %}${{ listing.starting_price }}{% endif %}</li>
                       <li class="list-group-item list-group-item-info">Description: {{ listing.description|safe }}</li>
                       <li class="list-group-item list-group-item-info">Category: {{ listing.get_category_display }}</li>
                     </ul>

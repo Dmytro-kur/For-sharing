@@ -29,7 +29,7 @@ class Listing(models.Model):
     datetime = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_listings")
     title = models.CharField(max_length=255, unique=True)
-    description = RichTextField()
+    description = RichTextField(max_length=255)
     starting_price = models.DecimalField(max_digits=19, decimal_places=2)
     category = models.CharField(max_length=2, choices=Category.choices,
                                 default=Category.OTHERS,

@@ -21,69 +21,84 @@ from django.db.models import Max, Count
 #     def get_count_bid(self):
 #         return self.obj.bids.aggregate(Count("bid"))['bid__count']-1
 
-# class InfoForm(forms.ModelForm):
+class InfoForm(forms.ModelForm):
     
-#     class Meta:
-#         model = Listing
-#         fields = ['title', 'description', 'starting_price', 'category']
-#         labels = {
-#             'title': 'Title',
-#             'starting_price': 'Enter the starting price',
-#             'category': 'Choose category (optional)',
-#         }
+    class Meta:
+        model = Listing
+        fields = ['title', 'description', 'starting_price', 'category']
+        labels = {
+            'title': 'Title',
+            'starting_price': 'Enter the starting price',
+            'category': 'Choose category (optional)',
 
-#         widgets = {
-#             'title': forms.TextInput(attrs={'class': 'form-control'}),
-#             'starting_bid': forms.NumberInput(attrs={'class': 'form-control'}),
-#             'category': forms.Select(attrs={'class': 'form-control'}),
-#         }
+        }
 
-# class CategoryForm(forms.ModelForm):
-#     class Meta:
-#         model = Listing
-#         fields = ['category']
-#         labels = {
-#             'category': '',
-#         }
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'starting_price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
 
-#         widgets = {
-#             'category': forms.Select(attrs={'class': 'form-control'}),
-#         }
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Listing
+        fields = ['category']
+        labels = {
+            'category': '',
+        }
 
-# class CommForm(forms.ModelForm):
-#     class Meta:
-#         model = Comment
-#         fields = ['comment']
-#         labels = {
-#             'comment': '',
-#         }
+        widgets = {
+            'category': forms.Select(attrs={'class': 'form-control'}),
+        }
 
-# class BidForm(forms.ModelForm):
-#     class Meta:
-#         model = Bid
-#         fields = ['bid']
-#         labels = {
-#             'bid': '',
-#         }
+class CommForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['comment']
+        labels = {
+            'comment': '',
+        }
 
-#         widgets = {
-#             'bid': forms.NumberInput(attrs={'class': 'form-control'}),
-#         }
+class BidForm(forms.ModelForm):
+    class Meta:
+        model = Bid
+        fields = ['bid']
+        labels = {
+            'bid': '',
+        }
 
-# class ImageForm(forms.ModelForm):
-#     class Meta:
-#         model = Photo
-#         fields = ['image']
-#         labels = {
-#             'image': '',
-#         }
+        widgets = {
+            'bid': forms.NumberInput(attrs={'class': 'form-control'}),
+        }
 
-#         widgets = {
-#             'image': forms.FileInput(attrs={'class': 'custom-file-input',
-#                                             'id': 'inputGroupFile04',
-#                                             'aria-describedby': 'inputGroupFileAddon04',}),
-#         }
+class ImageForm(forms.ModelForm): 
+    ### This form is for Listing page ###
+    class Meta:
+        model = Photo
+        fields = ['image']
+        labels = {
+            'image': '',
+        }
 
+        widgets = {
+            'image': forms.FileInput(attrs={'class': 'custom-file-input',
+                                            'id': 'inputGroupFile04',
+                                            'aria-describedby': 'inputGroupFileAddon04',}),
+        }
+
+class ImageFormNew(forms.ModelForm): 
+    ### This form is for newly created page ###
+    class Meta:
+        model = Photo
+        fields = ['image']
+        labels = {
+            'image': '',
+        }
+
+        widgets = {
+            'image': forms.FileInput(attrs={'class': 'form-control',
+                                            'id': 'inputGroupFile01',}),
+        }
 
 def index(request):
 
@@ -146,50 +161,47 @@ def register(request):
 @login_required
 def new_listing(request):
     if request.method == 'POST':
-        pass
-#         Inf = InfoForm(request.POST)
-#         Img = ImageForm(request.POST, request.FILES)
+        
+        inf_form = InfoForm(request.POST)
+        img_form = ImageFormNew(request.POST, request.FILES)
 
-#         if infform.is_valid() and imgform.is_valid():
-#             category = infform.cleaned_data['category']
-#             image = imgform.cleaned_data["image"]
-#             bid = infform.cleaned_data['starting_price']
+        if inf_form.is_valid() and img_form.is_valid():
 
-#             inf_form = infform.save(commit=False)
+            user = request.user
+            title = inf_form.cleaned_data['title']
+            description = inf_form.cleaned_data['description']
+            starting_price = inf_form.cleaned_data['starting_price']
+            category = inf_form.cleaned_data['category']
+            if not category:
+                inf_form.category = "OT"
 
-#             if not category:
-#                 inf_form.category = "OT"
+            Listing(user=user, title=title,
+                    description=description,
+                    starting_price=starting_price).save()
 
-#             inf_form.user = request.user
-#             inf_form.current_price = bid
-#             inf_form.save()
+            listing = Listing.objects.filter(title=title).get()
+            image = img_form.cleaned_data['image']
+            if image:
+                Photo(user=user, listing=listing, image=image).save()
 
-#             if image:
-#                 Photo(listing=inf_form, image=image).save()
-
-#             Bid(listing=inf_form, bid=bid, username=request.user).save()
-
-#             return render(request, "auctions/listing.html", {
-#                 "listing": inf_form,
-#                 "img_form": ImageForm(),
-#                 "comment_form": CommForm(),
-#                 "bid_form": BidForm(),
-#                 "bid_count": 0,
-#                 "winner": inf_form.user,
-#                 "category_form": CategoryForm(),
-#                 "its_my": True,
-#                 "owner": True,
-#                 "bid_error": None,
-#                 })
-#         else:
-#             return render(request, "auctions/new_listing.html", {
-#                 "inf_form": InfoForm(),
-#                 "img_form": ImageForm(),
-#                 })
+            return render(request, "auctions/listing.html", {
+                "listing": listing,
+                "img_form": ImageFormNew(),
+                "comment_form": CommForm(),
+                "bid_form": BidForm(),
+                "category_form": CategoryForm(),
+                "its_my": True,
+                "request_user": request.user,
+                })
+        else:
+            return render(request, "auctions/new_listing.html", {
+                "inf_form": InfoForm(),
+                "img_form": ImageFormNew(),
+                })
     else:
         return render(request, "auctions/new_listing.html", {
             "inf_form": InfoForm(),
-            "img_form": ImageForm(),
+            "img_form": ImageFormNew(),
             })
 
 

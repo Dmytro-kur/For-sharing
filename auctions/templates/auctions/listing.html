@@ -67,11 +67,11 @@
         <li class="list-group-item list-group-item-info">Description: {{ listing.description|safe }}</li>
         <li class="list-group-item list-group-item-info">Category: {{ listing.get_category_display }}</li>
         <li class="list-group-item list-group-item-info">
-          {% if bid_count == 0 %}
-            <strong>Starting price is ${{ listing.current_price }}</strong>
+          {% if listing.listing_bids.count == 0 %}
+            <strong>Starting price is ${{ listing.starting_price }}</strong>
           {% else %}
-            <strong>{{ bid_count }} bid(s) so far</strong><br>
-            <strong>{{ winner }}'s bid is the current bid ${{ listing.current_price }}</strong>
+            <strong>{{ listing.listing_bids.count }} bid(s) so far</strong><br>
+            <strong>{{ winner_name }}'s bid is the current bid ${{ listing.current_bid }}</strong>
           {% endif %}
         </li>
       </ul>
@@ -84,31 +84,36 @@
         <!-- ADD PHOTO -->
         <form action="{% url 'listing' listing.title %}" method="post" enctype="multipart/form-data">
           {% csrf_token %}
-          <div class="input-group">
+          <div class="input-group mb-3">
             <div class="custom-file">
               {{ img_form }}
               <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
             </div>
             <div class="input-group-append">
-              <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Add Photo</button>
+              <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon03">Add Photo</button>
             </div>
           </div>
         </form>
         <!-- end -->
+
         <br>
+
         <!-- Select CATEGORY -->
         <form class="select_category" action="{% url 'listing' listing.title %}" method="post">
           {% csrf_token %}
           <button class="btn btn-secondary" type="submit">Select</button>{{ category_form }}
         </form>
         <!-- end -->
+
         <br>
+
         <!-- CLOSE listing -->
         <form method="post">
           {% csrf_token %}
           <button class="btn btn-secondary" type="submit" name="close" value="yes">Close listing</button>
         </form>
         <!-- end -->
+
         <br>
 
       {% endif %}
@@ -140,10 +145,10 @@
       </ul>
       <!-- Details -->
       <br>
-      {% if owner %}
+      {% if winner %}
 
         <div class="alert alert-success" role="alert">
-          <strong>{{ winner }}, you won this auction with the price: ${{ listing.current_price }}</strong>
+          <strong>{{ winner_name }}, you won this auction with the price: ${{ listing.current_bid }}</strong>
         </div>
 
       {% else %}
@@ -154,6 +159,8 @@
 
       {% endif %}
     {% endif %}
+
+
 
     <div class="alert alert-warning" role="alert"></div>
 
@@ -169,9 +176,9 @@
 
     
     <div class="comment_grid">
-      {% for comment in listing.comments.all %}
+      {% for comment in listing.listing_comments.all %}
         <div class="comment_grid_item">
-          <p style="font-size: 12px; text-align: left; font-style: italic;">{{ comment.username }} said:</p>
+          <p style="font-size: 12px; text-align: left; font-style: italic;">{{ comment.user }} said:</p>
           <div style="text-indent: 50px;">
             {{ comment.comment|safe}}
           </div>
