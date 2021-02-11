@@ -78,7 +78,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'notifications' %}">
                             <button type="button" class="btn btn-light">
-                                Notifications <span class="badge bg-danger">{% if request.user.notifications.count != 0 %} {{ request.user.notifications.count }} {% endif %}</span>
+                                Notifications <span class="badge bg-danger">{% if request.user.user_notifications.count != 0 %} {{ request.user.user_notifications.count }} {% endif %}</span>
                               </button></a>
                     </li>
                     <li class="nav-item">

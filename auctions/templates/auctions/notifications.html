@@ -9,11 +9,10 @@
                 <li>
                     <form method="POST">
                         {% csrf_token %}
-                        {{ notification.user }}, 
-                        <a href="{% url 'listing' notification.notification %}"> 
-                            {{ notification.notification }}</a> was closed {{ notification.datetime }}
+                        <a href="{% url 'listing' notification.listing.title %}"> 
+                            {{ notification.listing.title }}</a> was closed {{ notification.datetime }}
                         <button class="btn btn-outline-dark" type="submit" name='notification' 
-                        value="{{ notification.notification }}"> clear </button>
+                        value="{{ notification.listing.title }}"> clear </button>
                     </form>
                 </li>
             </div>
