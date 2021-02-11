@@ -18,10 +18,11 @@ class PhotoAdmin(admin.ModelAdmin):
 
 @admin.register(Listing)
 class ListingAdmin(admin.ModelAdmin):
+    filter_horizontal = ["watchlist"]
     inlines = [PhotoAdmin.InlinePhotoAdmin]
     class Meta:
         model = Listing
-    
+
 admin.site.register(Bid)
 admin.site.register(Comment)
 admin.site.register(Notification)

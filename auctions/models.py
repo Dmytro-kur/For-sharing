@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 import re
 from ckeditor.fields import RichTextField
 
+
 class User(AbstractUser):
     pass
 
@@ -26,54 +27,57 @@ class Listing(models.Model):
         __empty__ = _('(Unknown)')
 
     datetime = models.DateTimeField(auto_now_add=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="listings")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_listings")
     title = models.CharField(max_length=255, unique=True)
     description = RichTextField()
-    starting_bid = models.DecimalField(max_digits=19, decimal_places=2)
+    starting_price = models.DecimalField(max_digits=19, decimal_places=2)
     category = models.CharField(max_length=2, choices=Category.choices,
                                 default=Category.OTHERS,
                                 blank=True)
     watchlist = models.ManyToManyField(to=User, related_name="watch", blank=True)
-    current_price = models.DecimalField(max_digits=19, decimal_places=2)
+    current_bid = models.DecimalField(max_digits=19, decimal_places=2, blank=True, null=True)
     is_active = models.BooleanField(default=True)
+    
+    def __str__(self):
+        datetime = self.datetime.strftime("%d/%m/%Y %H:%M:%S")
+        return f"{self.title} / current bid: ${self.current_bid} / posted: {datetime}"
+
+class Bid(models.Model):
+    datetime = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_bids")
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listing_bids")
+    bid = models.DecimalField(max_digits=19, decimal_places=2)
 
     def __str__(self):
-        return f"/{self.title}/ starting bid: ${self.starting_bid} / posted: {self.datetime}"
+        datetime = self.datetime.strftime("%d/%m/%Y %H:%M:%S")
+        return f"{self.listing.title} / {self.user}'s bid: ${float(self.bid)} / posted: {datetime}"
 
 class Photo(models.Model):
-    listing = models.ForeignKey(Listing, default=None,
-                             on_delete=models.CASCADE,
-                             related_name='listing_photos')
-    
+    datetime = models.DateTimeField(auto_now_add=True)
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name='listing_photos')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_photos")
     image = models.ImageField(upload_to='users/%Y/%m/%d/', blank=True)
     
     def __str__(self):
-        return f"{self.listing.title}"
+        datetime = self.datetime.strftime("%d/%m/%Y %H:%M:%S")
+        return f"{self.listing.title} / {self.user} added URL: {self.image} / posted: {datetime}"
     
 class Comment(models.Model):
     datetime = models.DateTimeField(auto_now_add=True, blank=True)
-    username = models.CharField(max_length=255)
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name = "comments")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_comments")
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listing_comments")
     comment = RichTextField(blank=True)
 
     def __str__(self):
-        return f"{self.username} said about {self.listing.title}: \"{self.comment}\", Created {self.datetime}"
+        datetime = self.datetime.strftime("%d/%m/%Y %H:%M:%S")
+        return f"{self.listing.title} / {self.user}'s post / posted: {datetime}"
     
-class Bid(models.Model):
-    datetime = models.DateTimeField(auto_now_add=True, blank=True)
-    username = models.CharField(max_length=255)
-    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="bids")
-    bid = models.DecimalField(max_digits=19,
-                             decimal_places=2,
-                              blank=True)
-
-    def __str__(self):
-        return f"{self.username} makes a bid on {self.listing.title} listing: ${float(self.bid):.2f}"
-
 class Notification(models.Model):
     datetime = models.DateTimeField(auto_now_add=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="notifications")
-    notification = models.CharField(max_length=255)
+    ### Is who should be informed about closing ###
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_notifications")
+    listing = models.ForeignKey(Listing, on_delete=models.CASCADE, related_name="listing_notifications")
 
     def __str__(self):
-        return f"{self.user}, {self.notification}"
+        datetime = self.datetime.strftime("%d/%m/%Y %H:%M:%S")
+        return f"{self.user} / {self.listing.title} listing was closed / posted: {datetime}"
