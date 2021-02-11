@@ -11,80 +11,78 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Max, Count
 
-class max_count():
-    def __init__(self, obj, *args, **kwargs):
-        self.obj = obj
+# class max_count():
+#     def __init__(self, obj, *args, **kwargs):
+#         self.obj = obj
 
-    def get_max_bid(self):
-        return float(self.obj.bids.aggregate(Max('bid'))['bid__max'])
+#     def get_max_bid(self):
+#         return float(self.obj.bids.aggregate(Max('bid'))['bid__max'])
 
-    def get_count_bid(self):
-        return self.obj.bids.aggregate(Count("bid"))['bid__count']-1
+#     def get_count_bid(self):
+#         return self.obj.bids.aggregate(Count("bid"))['bid__count']-1
 
-class InfoForm(forms.ModelForm):
+# class InfoForm(forms.ModelForm):
     
-    class Meta:
-        model = Listing
-        fields = ['title', 'description', 'starting_bid', 'category']
-        labels = {
-            'title': 'Title',
-            'starting_bid': 'Enter the starting price',
-            'category': 'Choose category (optional)',
-        }
+#     class Meta:
+#         model = Listing
+#         fields = ['title', 'description', 'starting_price', 'category']
+#         labels = {
+#             'title': 'Title',
+#             'starting_price': 'Enter the starting price',
+#             'category': 'Choose category (optional)',
+#         }
 
-        widgets = {
-            'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'starting_bid': forms.NumberInput(attrs={'class': 'form-control',
-                                                    'placeholder': 'e.g. 100.00'}),
-            'category': forms.Select(attrs={'class': 'form-control'}),
-        }
+#         widgets = {
+#             'title': forms.TextInput(attrs={'class': 'form-control'}),
+#             'starting_bid': forms.NumberInput(attrs={'class': 'form-control'}),
+#             'category': forms.Select(attrs={'class': 'form-control'}),
+#         }
 
-class CategoryForm(forms.ModelForm):
-    class Meta:
-        model = Listing
-        fields = ['category']
-        labels = {
-            'category': '',
-        }
+# class CategoryForm(forms.ModelForm):
+#     class Meta:
+#         model = Listing
+#         fields = ['category']
+#         labels = {
+#             'category': '',
+#         }
 
-        widgets = {
-            'category': forms.Select(attrs={'class': 'form-control'}),
-        }
+#         widgets = {
+#             'category': forms.Select(attrs={'class': 'form-control'}),
+#         }
 
-class CommForm(forms.ModelForm):
-    class Meta:
-        model = Comment
-        fields = ['comment']
-        labels = {
-            'comment': '',
-        }
+# class CommForm(forms.ModelForm):
+#     class Meta:
+#         model = Comment
+#         fields = ['comment']
+#         labels = {
+#             'comment': '',
+#         }
 
-class BidForm(forms.ModelForm):
-    class Meta:
-        model = Bid
-        fields = ['bid']
-        labels = {
-            'bid': '',
-        }
+# class BidForm(forms.ModelForm):
+#     class Meta:
+#         model = Bid
+#         fields = ['bid']
+#         labels = {
+#             'bid': '',
+#         }
 
-        widgets = {
-            'bid': forms.NumberInput(attrs={'class': 'form-control',
-                                            'placeholder': '$'}),
-        }
+#         widgets = {
+#             'bid': forms.NumberInput(attrs={'class': 'form-control'}),
+#         }
 
-class ImageForm(forms.ModelForm):
-    class Meta:
-        model = Photo
-        fields = ['image']
-        labels = {
-            'image': '',
-        }
+# class ImageForm(forms.ModelForm):
+#     class Meta:
+#         model = Photo
+#         fields = ['image']
+#         labels = {
+#             'image': '',
+#         }
 
-        widgets = {
-            'image': forms.FileInput(attrs={'class': 'custom-file-input',
-                                            'id': 'inputGroupFile04',
-                                            'aria-describedby': 'inputGroupFileAddon04',}),
-        }
+#         widgets = {
+#             'image': forms.FileInput(attrs={'class': 'custom-file-input',
+#                                             'id': 'inputGroupFile04',
+#                                             'aria-describedby': 'inputGroupFileAddon04',}),
+#         }
 
 
 def index(request):
@@ -147,49 +145,48 @@ def register(request):
     
 @login_required
 def new_listing(request):
-
-    if request.method == 'POST':
+    pass
+     if request.method == 'POST':
         
-        infform = InfoForm(request.POST)
-        imgform = ImageForm(request.POST, request.FILES)
+#         Inf = InfoForm(request.POST)
+#         Img = ImageForm(request.POST, request.FILES)
 
-        if infform.is_valid() and imgform.is_valid():
-            category = infform.cleaned_data['category']
-            image = imgform.cleaned_data["image"]
-            bid = infform.cleaned_data['starting_bid']
+#         if infform.is_valid() and imgform.is_valid():
+#             category = infform.cleaned_data['category']
+#             image = imgform.cleaned_data["image"]
+#             bid = infform.cleaned_data['starting_price']
 
-            inf_form = infform.save(commit=False)
+#             inf_form = infform.save(commit=False)
 
-            if not category:
-                inf_form.category = "OT"
+#             if not category:
+#                 inf_form.category = "OT"
 
-            inf_form.user = request.user
-            inf_form.current_price = bid
-            inf_form.save()
+#             inf_form.user = request.user
+#             inf_form.current_price = bid
+#             inf_form.save()
 
-            if image:
-                Photo(listing=inf_form, image=image).save()
+#             if image:
+#                 Photo(listing=inf_form, image=image).save()
 
-            Bid(listing=inf_form, bid=bid, username=request.user).save()
+#             Bid(listing=inf_form, bid=bid, username=request.user).save()
 
-            return render(request, "auctions/listing.html", {
-                "listing": inf_form,
-                "img_form": ImageForm(),
-                "comment_form": CommForm(),
-                "bid_form": BidForm(),
-                "bid_count": 0,
-                "winner": inf_form.user,
-                "category_form": CategoryForm(),
-                "its_my": True,
-                "owner": True,
-                "bid_error": None,
-                })
-        else:
-            return render(request, "auctions/new_listing.html", {
-                "inf_form": InfoForm(),
-                "img_form": ImageForm(),
-                "description_error": 'Description field is required, please fill description field',
-                })
+#             return render(request, "auctions/listing.html", {
+#                 "listing": inf_form,
+#                 "img_form": ImageForm(),
+#                 "comment_form": CommForm(),
+#                 "bid_form": BidForm(),
+#                 "bid_count": 0,
+#                 "winner": inf_form.user,
+#                 "category_form": CategoryForm(),
+#                 "its_my": True,
+#                 "owner": True,
+#                 "bid_error": None,
+#                 })
+#         else:
+#             return render(request, "auctions/new_listing.html", {
+#                 "inf_form": InfoForm(),
+#                 "img_form": ImageForm(),
+#                 })
     else:
         return render(request, "auctions/new_listing.html", {
             "inf_form": InfoForm(),
@@ -199,121 +196,121 @@ def new_listing(request):
 
 @login_required
 def listing(request, title):
+    pass
+#     listing = Listing.objects.filter(title=title).first()
+#     user = User.objects.filter(username=request.user).first()
+#     bid_error = None
+#     if listing:
+#         listing_obj = max_count(listing)
+#         its_my = listing.user == request.user
 
-    listing = Listing.objects.filter(title=title).first()
-    user_obj = User.objects.filter(username=request.user).first()
-    bid_error = None
-    if listing:
-        listing_obj = max_count(listing)
-        its_my = listing.user == request.user
-
-        if request.method == 'POST':
-            bidform = BidForm()
-            if request.FILES.get('image'):
-                imgform = ImageForm(request.POST, request.FILES)
-                if imgform.is_valid():
-                    image = imgform.cleaned_data["image"]
+#         if request.method == 'POST':
+#             bidform = BidForm()
+#             if request.FILES.get('image'):
+#                 imgform = ImageForm(request.FILES)
+#                 if imgform.is_valid():
+#                     image = imgform.cleaned_data["image"]
                     
-                    Photo(listing=listing, image=image).save()
-                #else:
-                    #return render(request, 'auctions/error.html', {
-                        #"message": "Image isn\'t valid"
-                    #})
-            if request.POST.get('comment'):
-                commentform = CommForm(request.POST)
-                if commentform.is_valid():
-                    comment = commentform.cleaned_data["comment"]
-                    Comment(listing=listing,
-                                username=request.user, comment=comment).save()
-                #else:
-                    #return render(request, 'auctions/error.html', {
-                        #"message": "comment isn\'t valid"
-                    #})
-            if request.POST.get('bid'):
-                bidform = BidForm(request.POST)
-                if bidform.is_valid():
-                    bid = bidform.cleaned_data["bid"]
-                    if float(bid) <= listing_obj.get_max_bid():
-                        bid_error = 'Your bid should be higher than the current price!'
-                        bidform = BidForm(request.POST)
-                    else:
-                        Bid(listing=listing, username=request.user, bid=bid).save()
-                        listing.current_price = listing_obj.get_max_bid()
-                        listing.save()
-                        bidform = BidForm()
-                        #else:
-                            #return render(request, "auctions/error.html", {
-                                #"message": 'Please change the bid, this bid already exists',
-                            #})
-                    #else:
-                        #return render(request, "auctions/error.html", {
-                            #"message": 'bid isn\'t valid',
-                        #})
-            if request.POST.get("category"):
-                catform = CategoryForm(request.POST)
-                if catform.is_valid():
-                    category = catform.cleaned_data["category"]
-                    listing.category = category
-                    listing.save()
-                #else:
-                    #return render(request, "auctions/error.html", {
-                        #"message": 'category isn\'t valid',
-                #})       
-            if request.POST.get('add') or request.POST.get('remove'):
-                if request.POST.get("add") == 'yes':
-                    listing.watchlist.add(user_obj)
-                if request.POST.get('remove') == 'yes':
-                    listing.watchlist.remove(user_obj)
+#                     Photo(listing=listing, image=image).save()
+#                 #else:
+#                     #return render(request, 'auctions/error.html', {
+#                         #"message": "Image isn\'t valid"
+#                     #})
+#             if request.POST.get('comment'):
+#                 commentform = CommForm(request.POST)
+#                 if commentform.is_valid():
+#                     comment = commentform.cleaned_data["comment"]
+#                     Comment(listing=listing,
+#                                 username=request.user, comment=comment).save()
+#                 #else:
+#                     #return render(request, 'auctions/error.html', {
+#                         #"message": "comment isn\'t valid"
+#                     #})
+#             if request.POST.get('bid'):
+#                 bidform = BidForm(request.POST)
+#                 if bidform.is_valid():
+#                     bid = bidform.cleaned_data["bid"]
+#                     if float(bid) <= listing_obj.get_max_bid():
+#                         bid_error = 'Your bid should be higher than the current price!'
+#                         bidform = BidForm(request.POST)
+#                     else:
+#                         Bid(listing=listing, username=request.user, bid=bid).save()
+#                         listing.current_price = listing_obj.get_max_bid()
+#                         listing.save()
+#                         bidform = BidForm()
+#                         #else:
+#                             #return render(request, "auctions/error.html", {
+#                                 #"message": 'Please change the bid, this bid already exists',
+#                             #})
+#                     #else:
+#                         #return render(request, "auctions/error.html", {
+#                             #"message": 'bid isn\'t valid',
+#                         #})
+#             if request.POST.get("category"):
+#                 catform = CategoryForm(request.POST)
+#                 if catform.is_valid():
+#                     category = catform.cleaned_data["category"]
+#                     listing.category = category
+#                     listing.save()
+#                 #else:
+#                     #return render(request, "auctions/error.html", {
+#                         #"message": 'category isn\'t valid',
+#                 #})       
+#             if request.POST.get('add') or request.POST.get('remove'):
+#                 if request.POST.get("add") == 'yes':
+#                     listing.watchlist.add(user)
+#                 if request.POST.get('remove') == 'yes':
+#                     listing.watchlist.remove(user)
 
-            if request.POST.get('close'):
-                listing.is_active=False
-                listing.save()
-                b = Bid.objects.all().filter(listing=listing)
-                u = User.objects.all()
+#             if request.POST.get('close'):
+#                 listing.is_active=False
+#                 listing.save()
+#                 b = Bid.objects.all().filter(listing=listing)
+#                 u = User.objects.all()
 
-                for i in u:
-                    if b.filter(username=i.username):
-                        Notification(user=i, notification=listing.title).save()
+#                 for i in u:
+#                     if b.filter(username=i.username):
+#                         Notification(user=i, notification=listing.title).save()
 
-            winner = Bid.objects.filter(bid=listing_obj.get_max_bid()).first().username
-            return render(request, "auctions/listing.html", {
-                "listing": listing,
-                "img_form": ImageForm(),
-                "comment_form": CommForm(),
-                "bid_form": bidform,
-                "bid_count": listing_obj.get_count_bid(),
-                "winner": winner,
-                "category_form": CategoryForm(),
-                "its_my": its_my,
-                "owner": str(winner)==str(request.user),
-                "bid_error": bid_error,
-            })
-        else:
-            winner = Bid.objects.filter(bid=listing_obj.get_max_bid()).first().username
-            return render(request, "auctions/listing.html", {
-                "listing": listing,
-                "img_form": ImageForm(),
-                "comment_form": CommForm(),
-                "bid_form": BidForm(),
-                "bid_count": listing_obj.get_count_bid(),
-                "winner": winner,
-                "category_form": CategoryForm(),
-                "its_my": its_my,
-                "owner": str(winner)==str(request.user),
-                "bid_error": None,
-            })
-    else:
-        return render(request, "auctions/error.html", {
-            "message": 'Listing doesn\'t exists',
-        })
+#             winner = Bid.objects.filter(bid=listing_obj.get_max_bid()).first().username
+#             return render(request, "auctions/listing.html", {
+#                 "listing": listing,
+#                 "img_form": ImageForm(),
+#                 "comment_form": CommForm(),
+#                 "bid_form": bidform,
+#                 "bid_count": listing_obj.get_count_bid(),
+#                 "winner": winner,
+#                 "category_form": CategoryForm(),
+#                 "its_my": its_my,
+#                 "owner": str(winner)==str(request.user),
+#                 "bid_error": bid_error,
+#             })
+#         else:
+#             winner = Bid.objects.filter(bid=listing_obj.get_max_bid()).first().username
+#             return render(request, "auctions/listing.html", {
+#                 "listing": listing,
+#                 "img_form": ImageForm(),
+#                 "comment_form": CommForm(),
+#                 "bid_form": BidForm(),
+#                 "bid_count": listing_obj.get_count_bid(),
+#                 "winner": winner,
+#                 "category_form": CategoryForm(),
+#                 "its_my": its_my,
+#                 "owner": str(winner)==str(request.user),
+#                 "bid_error": None,
+#             })
+#     else:
+#         return render(request, "auctions/error.html", {
+#             "message": 'Listing doesn\'t exists',
+#         })
 
 @login_required
 def my_listings(request):
 
-    my_listings = User.objects.filter(username=request.user).first()
+    my_listings = User.objects.filter(username=request.user).get().user_listings.all()
 
     return render(request, "auctions/my_listings.html", {
-        "listings": my_listings.listings.all(),
+        "listings": my_listings,
     })
 
 @login_required
@@ -360,7 +357,7 @@ def watchlist(request):
 
     if request.method == "GET":
         
-        u = User.objects.filter(username=request.user).first()
+        u = User.objects.filter(username=request.user).get()
         watchlist = u.watch.all()
 
         return render(request, "auctions/watchlist.html", {
@@ -378,15 +375,18 @@ def error(request):
 def notifications(request):
 
     if request.method == "POST":
+        title = request.POST['notification']
+        L = Listing.objects.filter(title=title).get()
+        Notification.objects.filter(user=request.user).filter(listing=L).get().delete()
+        notifications = Notification.objects.filter(user=request.user).all()
+        return render(request, 'auctions/notifications.html', {
+            "notifications": notifications,
+        })
+        
 
-        Notification.objects.all().filter(notification=str(request.POST['notification'])).delete()
-        notif = Notification.objects.all().filter(user=request.user)
+    elif request.method == "GET":
+        notifications = Notification.objects.filter(user=request.user).all()
         return render(request, 'auctions/notifications.html', {
-            "notifications": notif,
-        }) 
-    else:
-        notif = Notification.objects.all().filter(user=request.user)
-        return render(request, 'auctions/notifications.html', {
-            "notifications": notif,
+            "notifications": notifications,
         })
 
