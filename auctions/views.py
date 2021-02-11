@@ -145,9 +145,8 @@ def register(request):
     
 @login_required
 def new_listing(request):
-    pass
-     if request.method == 'POST':
-        
+    if request.method == 'POST':
+        pass
 #         Inf = InfoForm(request.POST)
 #         Img = ImageForm(request.POST, request.FILES)
 
