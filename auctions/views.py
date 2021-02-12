@@ -159,6 +159,7 @@ def new_listing(request):
             description = inf_form.cleaned_data['description']
             starting_price = inf_form.cleaned_data['starting_price']
             category = inf_form.cleaned_data['category']
+            
             if not category:
                 category ='OT'
 
@@ -173,7 +174,7 @@ def new_listing(request):
 
             return render(request, "auctions/listing.html", {
                 "listing": listing,
-                "img_form": ImageFormNew(),
+                "img_form": ImageForm(),
                 "comment_form": CommForm(),
                 "bid_form": BidForm(),
                 "category_form": CategoryForm(),
@@ -181,9 +182,8 @@ def new_listing(request):
                 })
         else:
             return render(request, "auctions/new_listing.html", {
-                "inf_form": InfoForm(),
+                "inf_form": InfoForm(request.POST),
                 "img_form": ImageFormNew(),
-                "description_error": 'Please fill in description field!'
                 })
     else:
         return render(request, "auctions/new_listing.html", {

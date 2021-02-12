@@ -4,14 +4,20 @@
 
     <form action="{% url 'new_listing' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
-        {% if description_error %}
-            <div class="alert alert-danger" role="alert">
-                {{ description_error }}
-            </div>
-        {% endif %}
-        {{ inf_form.as_p }}
-        {{ inf_form.media }}
-        <br>
+        {% for field in inf_form %}
+            {{ field.label_tag }}
+            {{ field }}
+            {{ inf_form.media }}
+            {% if inf_form.errors %}
+                {% for error in field.errors %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error|escape }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            <br>
+        {% endfor %}
+
         <p>Add a photo of the item (optional):</p>
 
         <!-- Add photo -->
