@@ -242,17 +242,19 @@ def listing(request, title):
                             listing.current_bid = bid
                             listing.save()
 
-            catform = CategoryForm(request.POST)
-            if catform.is_valid():
-                category = catform.cleaned_data["category"]
-                if not category:
-                    category = 'OT'
-                listing.category = category
-                listing.save()
-            else:
-                return render(request, "auctions/error.html", {
-                    "message": 'category isn\'t valid',
-                })
+            if request.POST.get('category'):
+                catform = CategoryForm(request.POST)
+                if catform.is_valid():
+                    category = catform.cleaned_data["category"]
+                    print(len(category))
+                    if not category:
+                        category = 'OT'
+                    listing.category = category
+                    listing.save()
+                else:
+                    return render(request, "auctions/error.html", {
+                        "message": 'category isn\'t valid',
+                    })
 
             if request.POST.get('add') or request.POST.get('remove'):
                 if request.POST.get("add") == 'yes':
