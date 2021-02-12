@@ -11,16 +11,6 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Max, Count
 
-# class max_count():
-#     def __init__(self, obj, *args, **kwargs):
-#         self.obj = obj
-
-#     def get_max_bid(self):
-#         return float(self.obj.bids.aggregate(Max('bid'))['bid__max'])
-
-#     def get_count_bid(self):
-#         return self.obj.bids.aggregate(Count("bid"))['bid__count']-1
-
 class InfoForm(forms.ModelForm):
     
     class Meta:
@@ -106,7 +96,6 @@ def index(request):
         "listings": Listing.objects.filter(is_active=True),
     })
 
-
 def login_view(request):
     if request.method == "POST":
 
@@ -126,11 +115,9 @@ def login_view(request):
     else:
         return render(request, "auctions/login.html")
 
-
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse("index"))
-
 
 def register(request):
     if request.method == "POST":
@@ -172,6 +159,8 @@ def new_listing(request):
             description = inf_form.cleaned_data['description']
             starting_price = inf_form.cleaned_data['starting_price']
             category = inf_form.cleaned_data['category']
+            if not category:
+                category ='OT'
 
             Listing(user=user, title=title,
                     description=description,
@@ -202,7 +191,6 @@ def new_listing(request):
             "img_form": ImageFormNew(),
             })
 
-
 @login_required
 def listing(request, title):
     
@@ -213,31 +201,30 @@ def listing(request, title):
 
         if request.method == 'POST':
             bid_error = ''
-            if request.FILES.get('image'):
-                imgform = ImageForm(request.POST, request.FILES)
-                if imgform.is_valid():
-                    image = imgform.cleaned_data['image']
-                    
+            imgform = ImageForm(request.POST, request.FILES)
+            if imgform.is_valid():
+                image = imgform.cleaned_data['image']
+                if image:
                     Photo(listing=listing, user=user, image=image).save()
-                else:
-                    return render(request, 'auctions/error.html', {
-                        "message": "Image isn\'t valid"
-                    })
+            else:
+                return render(request, 'auctions/error.html', {
+                    "message": "Image isn\'t valid"
+                })
 
-            if request.POST.get('comment'):
-                commentform = CommForm(request.POST)
-                if commentform.is_valid():
-                    comment = commentform.cleaned_data["comment"]
+            commentform = CommForm(request.POST)
+            if commentform.is_valid():
+                comment = commentform.cleaned_data["comment"]
+                if comment:
                     Comment(listing=listing, user=request.user, comment=comment).save()
-                else:
-                    return render(request, 'auctions/error.html', {
-                        "message": "comment isn\'t valid"
-                    })
+            else:
+                return render(request, 'auctions/error.html', {
+                    "message": "comment isn\'t valid"
+                })
 
-            if request.POST.get('bid'):
-                bidform = BidForm(request.POST)
-                if bidform.is_valid():
-                    bid = float(bidform.cleaned_data["bid"])
+            bidform = BidForm(request.POST)
+            if bidform.is_valid():
+                bid = float(bidform.cleaned_data["bid"])
+                if bid:
                     if Bid.objects.filter(listing=listing):
                         max_bid = Bid.objects.filter(listing=listing).aggregate(Max('bid'))['bid__max']
                         if bid <= float(max_bid):
@@ -255,17 +242,18 @@ def listing(request, title):
                             listing.current_bid = bid
                             listing.save()
 
-            if request.POST.get("category"):
-                catform = CategoryForm(request.POST)
-                if catform.is_valid():
-                    category = catform.cleaned_data["category"]
-                    listing.category = category
-                    listing.save()
-                else:
-                    return render(request, "auctions/error.html", {
-                        "message": 'category isn\'t valid',
-                }) 
-      
+            catform = CategoryForm(request.POST)
+            if catform.is_valid():
+                category = catform.cleaned_data["category"]
+                if not category:
+                    category = 'OT'
+                listing.category = category
+                listing.save()
+            else:
+                return render(request, "auctions/error.html", {
+                    "message": 'category isn\'t valid',
+                })
+
             if request.POST.get('add') or request.POST.get('remove'):
                 if request.POST.get("add") == 'yes':
                     listing.watchlist.add(user)
