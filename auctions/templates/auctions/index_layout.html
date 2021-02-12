@@ -1,0 +1,47 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+{% block my_listings %}
+{% endblock %}
+
+{% block watchlist %}
+{% endblock %}
+
+{% block category %}
+{% endblock %}
+
+    <div id="container">
+    {% for listing in listings %}
+        <div class="grid">
+        <div class="grid-item">
+            <p>{{ listing.title }}{% if listing.is_active %} (active){% else %} (closed){% endif %}<a href="{% url 'listing' listing.title %}">
+
+            <p><img class="index" src="{{ listing.listing_photos.all.first.image.url }}" alt="image"></p>
+
+            </a></p>
+        </div>
+
+        <div class="grid-item">
+            <p>
+            <a class="btn btn-light" data-bs-toggle="collapse" href="#multiCollapseExample{{ forloop.counter }}" role="button" aria-expanded="false" aria-controls="multiCollapseExample{{ forloop.counter }}">Details</a>
+            </p>
+            <div class="row">
+            <div class="col">
+                <div class="collapse multi-collapse" id="multiCollapseExample{{ forloop.counter }}">
+                <div class="card card-body">
+                    <ul class="list-group">
+                    <li class="list-group-item list-group-item-secondary">{% if listing.current_bid %}${{ listing.current_bid }}{% else %}${{ listing.starting_price }}{% endif %}</li>
+                    <li class="list-group-item list-group-item-info">Description: {{ listing.description|safe }}</li>
+                    <li class="list-group-item list-group-item-info">Category: {{ listing.get_category_display }}</li>
+                    </ul>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    {% endfor %}
+    </div>
+
+{% endblock %}
