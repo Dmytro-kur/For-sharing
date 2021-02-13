@@ -5,7 +5,7 @@
     <form action="{% url 'new_listing' %}" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in inf_form %}
-            {{ field.label_tag }}
+            <p>{{ field.label_tag }}</p>
             {{ field }}
             {{ inf_form.media }}
             {% if inf_form.errors %}
