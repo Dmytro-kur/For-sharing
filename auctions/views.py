@@ -25,7 +25,8 @@ class InfoForm(forms.ModelForm):
 
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'starting_price': forms.NumberInput(attrs={'class': 'form-control'}),
+            'starting_price': forms.NumberInput(attrs={'class': 'form-control',
+                                                        'placeholder': '$'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
         }
 
@@ -58,7 +59,8 @@ class BidForm(forms.ModelForm):
         }
 
         widgets = {
-            'bid': forms.NumberInput(attrs={'class': 'form-control'}),
+            'bid': forms.NumberInput(attrs={'class': 'form-control',
+                                            'placeholder': '$'}),
         }
 
 class ImageForm(forms.ModelForm): 
