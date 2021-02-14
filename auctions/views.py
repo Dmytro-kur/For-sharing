@@ -155,7 +155,6 @@ def new_listing(request):
         img_form = ImageFormNew(request.POST, request.FILES)
 
         if inf_form.is_valid() and img_form.is_valid():
-            its_my = True
             user = request.user
             title = inf_form.cleaned_data['title']
             description = inf_form.cleaned_data['description']
@@ -175,7 +174,7 @@ def new_listing(request):
                 Photo(user=user, listing=listing, image=image).save()
 
             return HttpResponseRedirect(reverse('listing', kwargs={'title': title}))
-            
+
         else:
             return render(request, "auctions/new_listing.html", {
                 "inf_form": InfoForm(request.POST),
